@@ -27,6 +27,25 @@ From article at Wikipedia:
     sections of the code that are seldom or never accessed during
     execution.
 
+What is new in this project:
+Programmatic API (main mutation phase only)
+-------------------------------------------
+
+If you only want code mutation (without loading/running tests), use:
+
+.. code:: python
+
+    from mutpy.main_mutation import generate_mutants_from_file
+
+    mutants = generate_mutants_from_file('calculator.py', 5)
+    for mutant in mutants:
+        print(mutant['number'])
+        print(mutant['mutations'])  # [{'operator': 'AOR', 'lineno': 2}, ...]
+        print(mutant['source'])     # mutated source code
+
+Mutation operators
+------------------
+
 Installation
 ------------
 
@@ -199,8 +218,6 @@ List of all arguments with which you can run MutPy:
 -  ``--mutation-number MUTATION_NUMBER`` - run only one mutation (debug
    purpose).
 
-Mutation operators
-------------------
 
 List of MutPy mutation operators sorted by alphabetical order:
 
