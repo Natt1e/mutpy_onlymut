@@ -43,6 +43,13 @@ If you only want code mutation (without loading/running tests), use:
         print(mutant['mutations'])  # [{'operator': 'AOR', 'lineno': 2}, ...]
         print(mutant['source'])     # mutated source code
 
+You can also mutate code directly from a string:
+
+.. code:: python
+
+    source = "def mul(x, y):\n    return x * y\n"
+    mutants = generate_mutants_from_file(mutant_count=5, code_string=source)
+
 Mutation operators
 ------------------
 
@@ -217,7 +224,6 @@ List of all arguments with which you can run MutPy:
 -  ``--list-hom-strategies`` - list available HOM strategies,
 -  ``--mutation-number MUTATION_NUMBER`` - run only one mutation (debug
    purpose).
-
 
 List of MutPy mutation operators sorted by alphabetical order:
 

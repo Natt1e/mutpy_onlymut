@@ -4,13 +4,19 @@ import os
 from mutpy import operators, utils
 
 
-def generate_mutants_from_file(file_path, mutant_count, include_experimental=False):
+def generate_mutants_from_file(
+    file_path=None,
+    mutant_count=1,
+    include_experimental=False,
+    code_string=None,
+):
     """Generate mutants from a single Python source file.
 
     Args:
         file_path (str): Path to Python source file.
         mutant_count (int): Maximum number of mutants to return.
         include_experimental (bool): Include experimental operators.
+        code_string (str): Python source code string.
 
     Returns:
         list[dict]: A list of mutants. Each item contains:
@@ -21,14 +27,23 @@ def generate_mutants_from_file(file_path, mutant_count, include_experimental=Fal
     if not isinstance(mutant_count, int) or mutant_count < 1:
         raise ValueError('mutant_count should be a positive integer.')
 
-    if not os.path.isfile(file_path):
-        raise ValueError('file_path should point to an existing file.')
+    if file_path and code_string is not None:
+        raise ValueError('Provide either file_path or code_string, not both.')
 
-    if not file_path.endswith('.py'):
-        raise ValueError('file_path should point to a .py file.')
+    if not file_path and code_string is None:
+        raise ValueError('Provide file_path or code_string.')
 
-    with open(file_path) as source_file:
-        source_code = source_file.read()
+    if code_string is not None:
+        if not isinstance(code_string, str):
+            raise ValueError('code_string should be a string.')
+        source_code = code_string
+    else:
+        if not os.path.isfile(file_path):
+            raise ValueError('file_path should point to an existing file.')
+        if not file_path.endswith('.py'):
+            raise ValueError('file_path should point to a .py file.')
+        with open(file_path) as source_file:
+            source_code = source_file.read()
 
     target_ast = utils.create_ast(source_code)
     sampler = utils.RandomSampler(percentage=100)

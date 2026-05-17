@@ -30,6 +30,16 @@ class MainMutationTest(unittest.TestCase):
         finally:
             os.unlink(file_path)
 
+    def test_generate_mutants_from_code_string_with_limit(self):
+        source = "def mul(x, y):\n    return x * y\n"
+        mutants = generate_mutants_from_file(mutant_count=2, code_string=source)
+
+        self.assertEqual(len(mutants), 2)
+        self.assertEqual(mutants[0]['number'], 1)
+        self.assertEqual(mutants[1]['number'], 2)
+        self.assertTrue(mutants[0]['mutations'])
+        self.assertTrue(mutants[0]['source'])
+
     def _create_temp_python_file(self, source):
         fd, path = tempfile.mkstemp(suffix='.py')
         try:
